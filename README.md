@@ -23,12 +23,7 @@ scripts/benchmark.sh
 
 The benchmark compares the optimized scalar path against the Apple Silicon NEON/SIMD path, validates the exported fields against Ghia centerline data, and writes a compact summary to `results/benchmark_comparison.csv`.
 
-<p>
-  <img src="figures/benchmark_runtime_total.png" alt="Total runtime by grid size" width="420">
-  <img src="figures/benchmark_ms_per_step.png" alt="Milliseconds per timestep by grid size" width="420">
-</p>
-
-These figures are generated from the latest local benchmark run. Benchmark runs clean generated files under `results/` and `figures/` first, so the plots reflect the current run rather than accumulated historical files.
+Benchmark runs clean generated files under `results/` and `figures/` first, so each summary reflects the current run rather than accumulated historical files.
 
 ## Problem
 
@@ -148,10 +143,7 @@ Useful environment knobs:
 - `NX=256 NT=500 scripts/benchmark.sh`: run one grid size.
 - `GRIDS="64 128" NT=500 scripts/benchmark.sh`: run a custom sweep.
 
-The benchmark writes `results/benchmark_comparison.csv` with runtime, speedup, Ghia centerline errors, pressure residual, and divergence metrics. It also writes:
-
-- `figures/benchmark_runtime_total.png`
-- `figures/benchmark_ms_per_step.png`
+The benchmark writes `results/benchmark_comparison.csv` with runtime, speedup, Ghia centerline errors, pressure residual, and divergence metrics. It also writes local runtime plots under `figures/`.
 
 Benchmark runs start by cleaning generated files under `results/` and `figures/`, preserving only `.gitkeep`, so each run leaves a compact current result set.
 
