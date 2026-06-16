@@ -38,11 +38,53 @@ The default validation target is the classic square lid-driven cavity:
 
 ## Numerical Method
 
+The governing equations are the 2D incompressible Navier-Stokes equations:
+
+```text
+du/dt + u du/dx + v du/dy = -dp/dx + nu (d2u/dx2 + d2u/dy2)
+dv/dt + u dv/dx + v dv/dy = -dp/dy + nu (d2v/dx2 + d2v/dy2)
+du/dx + dv/dy = 0
+```
+
+For the lid-driven cavity, velocity is nondimensionalized by the lid speed and length by the cavity width. The Reynolds number is:
+
+```text
+Re = U L / nu
+```
+
+With `U = 1` and `L = 1`, the kinematic viscosity is `nu = 1 / Re`.
+
 The solver stores fields on a MAC grid:
 
 - Pressure `p`: cell centers, `nx by ny`
 - Horizontal velocity `u`: vertical faces, `(nx + 1) by ny`
 - Vertical velocity `v`: horizontal faces, `nx by (ny + 1)`
+
+The projection method splits each timestep into a tentative velocity update and a pressure correction. First, advection and diffusion produce face-centered tentative velocities:
+
+```text
+u* = u^n + dt [-(u du/dx + v du/dy) + nu lap(u)]
+v* = v^n + dt [-(u dv/dx + v dv/dy) + nu lap(v)]
+```
+
+The tentative field is generally not divergence-free, so the pressure correction solves:
+
+```text
+lap(p) = div(u*, v*) / dt
+```
+
+Then the velocity is projected back onto the incompressible subspace:
+
+```text
+u^(n+1) = u* - dt dp/dx
+v^(n+1) = v* - dt dp/dy
+```
+
+On the MAC grid, this is implemented with the matching discrete divergence `D` and gradient `G`, so the pressure operator is the exact cell-centered `D*G` operator used by projection. In discrete form:
+
+```text
+div_ij = (u_{i+1,j} - u_{i,j}) / dx + (v_{i,j+1} - v_{i,j}) / dy
+```
 
 Each timestep:
 
