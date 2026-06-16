@@ -16,6 +16,12 @@ __pycache__/
 /figures/**
 !/figures/
 !/figures/.gitkeep
+!/figures/benchmark_runtime_total.png
+!/figures/benchmark_ms_per_step.png
+!/figures/benchmark_neon_speedup.png
+!/figures/ghia_u_centerline_Re100.png
+!/figures/ghia_v_centerline_Re100.png
+!/figures/ghia_error_summary_Re100.png
 
 # OS/editor noise
 .DS_Store
